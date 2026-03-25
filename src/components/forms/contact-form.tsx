@@ -84,12 +84,32 @@ export const ContactForm = ({ form }: ContactFormProps) => {
           />
         </div>
 
-        <button
-          type="submit"
-          className="inline-flex rounded-full bg-pine px-6 py-3 text-sm font-semibold uppercase tracking-[0.08em] text-white transition hover:bg-moss"
-        >
-          {form.submit}
-        </button>
+        <div className="flex flex-col sm:flex-row gap-4 mt-4">
+
+  {/* WHATSAPP (PRINCIPAL) */}
+  <a 
+    href="https://wa.me/593983542914?text=Hello%20I%20am%20interested%20in%20purchasing%20roses.%20Please%20share%20availability%20and%20pricing."
+    target="_blank"
+  >
+    <button
+      type="button"
+      className="inline-flex items-center justify-center rounded-full bg-green-700 px-6 py-3 text-sm font-semibold uppercase tracking-[0.08em] text-white hover:bg-green-800 transition"
+    >
+      WhatsApp
+    </button>
+  </a>
+
+  {/* EMAIL (SECUNDARIO) */}
+  <a href="mailto:ventas@dbfroses.com">
+    <button
+      type="button"
+      className="inline-flex items-center justify-center rounded-full border border-gray-400 px-6 py-3 text-sm font-semibold uppercase tracking-[0.08em] text-gray-800 hover:bg-gray-100 transition"
+    >
+      Email
+    </button>
+  </a>
+
+</div>
       </form>
 
       {submitted ? (
