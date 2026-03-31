@@ -24,7 +24,7 @@ export const PageHero = ({ title, description, badge, className }: PageHeroProps
       </div>
       <div className="flex-1 w-full h-64 md:h-80 relative rounded-2xl overflow-hidden shadow-lg">
         <img 
-  src="/images/hero-multiforal-variety.jpg" 
+  src="/images/hero-multifloral-variety.png" 
   alt="DBF Roses Variety" 
   className="w-full h-full object-cover" 
 />

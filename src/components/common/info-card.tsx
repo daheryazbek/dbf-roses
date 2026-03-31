@@ -16,17 +16,17 @@ export const InfoCard = ({ title, description }: { title: string; description: s
                             { 
                                 title: "ROSAS & SPRAY", 
                                     desc: "Premium, Standard and Spray roses.", 
-                                        img: "/images/category-roses-spray.jpg" 
+                                        img: "/images/category-roses-spray.png" 
                                           },
                                             { 
                                                 title: "SUMMER FLOWERS", 
                                                     desc: "Alstroemeria, Stock and more fillers.", 
-                                                        img: "/images/category-summer-flowers.jpg" 
+                                                        img: "/images/category-summer-flowers.png" 
                                                           },
                                                             { 
                                                                 title: "SPECIALTIES", 
                                                                     desc: "Callas, Sunflowers and Tropicals.", 
-                                                                        img: "/images/category-callas-specials.jpg" 
+                                                                        img: "/images/category-callas-specials.png" 
                                                                           }
                                                                           ];
 
