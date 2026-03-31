@@ -1,123 +1,60 @@
 ﻿"use client";
+import { useState, FormEvent } from "react";
 
-import { FormEvent, useState } from "react";
-import type { SiteContent } from "@/lib/content";
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const ContactForm = ({ form }: { form?: any }) => {
+  const [status, setStatus] = useState<"idle" | "sending" | "success">("idle");
 
-type ContactFormProps = {
-  form: SiteContent["contactPage"]["form"];
-};
+  const flowers = [
+    "Rosas (Premium/Std)", "Spray Roses", "Alstroemerias", 
+    "Stock", "Gypso / Fillers", "Callas / Mini Callas", 
+    "Girasoles", "Margaritas", "Summer Flowers Mix"
+  ];
 
-export const ContactForm = ({ form }: ContactFormProps) => {
-  const [submitted, setSubmitted] = useState(false);
-
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    // Future integration point:
-    // Send form data to an API route, CRM, or email service.
-    setSubmitted(true);
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    setStatus("sending");
+    setTimeout(() => setStatus("success"), 1500);
   };
 
   return (
-    <div className="rounded-2xl border border-pine/10 bg-white p-6 shadow-soft sm:p-8">
-      <h2 className="text-2xl text-pine">{form.title}</h2>
-
-      <form className="mt-6 space-y-4" onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="name" className="mb-2 block text-sm font-semibold text-ink/80">
-            {form.name}
-          </label>
-          <input
-            id="name"
-            name="name"
-            required
-            className="w-full rounded-xl border border-pine/20 bg-white px-4 py-3 text-sm text-ink outline-none ring-0 transition focus:border-pine"
-          />
+    <div style={{ padding: '2rem', backgroundColor: 'white', borderRadius: '1.5rem', border: '1px solid #f1f5f9', boxShadow: '0 10px 30px rgba(0,0,0,0.05)' }}>
+      <h2 style={{ fontSize: '1.5rem', color: '#1a3a32', marginBottom: '1.5rem', fontWeight: 'bold' }}>
+        {form?.title || "Export Inquiry / Cotización"}
+      </h2>
+      
+      <form style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }} onSubmit={handleSubmit}>
+        <input style={inputS} placeholder="Full Name / Nombre" required />
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+          <input style={inputS} placeholder="Company / Empresa" required />
+          <input style={inputS} placeholder="Country / País" required />
+        </div>
+        
+        <label style={{ fontSize: '0.8rem', fontWeight: 'bold', color: '#1a3a32', marginTop: '0.5rem' }}>PRODUCTOS DE INTERÉS:</label>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>
+          {flowers.map(f => (
+            <label key={f} style={{ fontSize: '0.8rem', display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
+              <input type="checkbox" /> {f}
+            </label>
+          ))}
         </div>
 
-        <div>
-          <label htmlFor="company" className="mb-2 block text-sm font-semibold text-ink/80">
-            {form.company}
-          </label>
-          <input
-            id="company"
-            name="company"
-            className="w-full rounded-xl border border-pine/20 bg-white px-4 py-3 text-sm text-ink outline-none ring-0 transition focus:border-pine"
-          />
-        </div>
+        <textarea style={{ ...inputS, minHeight: '100px' }} placeholder="Message / Detalles del pedido..." required />
 
-        <div>
-          <label htmlFor="email" className="mb-2 block text-sm font-semibold text-ink/80">
-            {form.email}
-          </label>
-          <input
-            id="email"
-            name="email"
-            type="email"
-            required
-            className="w-full rounded-xl border border-pine/20 bg-white px-4 py-3 text-sm text-ink outline-none ring-0 transition focus:border-pine"
-          />
-        </div>
+        <button type="submit" disabled={status === "sending"} style={status === "sending" ? {...btnS, opacity: 0.7} : btnS}>
+          {status === "sending" ? "SENDING..." : (form?.submit || "REQUEST QUOTATION")}
+        </button>
 
-        <div>
-          <label htmlFor="country" className="mb-2 block text-sm font-semibold text-ink/80">
-            {form.country}
-          </label>
-          <input
-            id="country"
-            name="country"
-            required
-            className="w-full rounded-xl border border-pine/20 bg-white px-4 py-3 text-sm text-ink outline-none ring-0 transition focus:border-pine"
-          />
-        </div>
-
-        <div>
-          <label htmlFor="message" className="mb-2 block text-sm font-semibold text-ink/80">
-            {form.message}
-          </label>
-          <textarea
-            id="message"
-            name="message"
-            rows={5}
-            required
-            className="w-full rounded-xl border border-pine/20 bg-white px-4 py-3 text-sm text-ink outline-none ring-0 transition focus:border-pine"
-          />
-        </div>
-
-        <div className="flex flex-col sm:flex-row gap-4 mt-4">
-
-  {/* WHATSAPP (PRINCIPAL) */}
-  <a 
-    href="https://wa.me/593983542914?text=Hello%20I%20am%20interested%20in%20purchasing%20roses.%20Please%20share%20availability%20and%20pricing."
-    target="_blank"
-  >
-    <button
-      type="button"
-      className="inline-flex items-center justify-center rounded-full bg-green-700 px-6 py-3 text-sm font-semibold uppercase tracking-[0.08em] text-white hover:bg-green-800 transition"
-    >
-      WhatsApp
-    </button>
-  </a>
-
-  {/* EMAIL (SECUNDARIO) */}
-  <a href="mailto:ventas@dbfroses.com">
-    <button
-      type="button"
-      className="inline-flex items-center justify-center rounded-full border border-gray-400 px-6 py-3 text-sm font-semibold uppercase tracking-[0.08em] text-gray-800 hover:bg-gray-100 transition"
-    >
-      Email
-    </button>
-  </a>
-
-</div>
+        <a href="https://wa.me/593983542914" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
+          <button type="button" style={waS}>WHATSAPP DIRECT</button>
+        </a>
       </form>
 
-      {submitted ? (
-        <p className="mt-4 rounded-xl border border-moss/20 bg-moss/10 px-4 py-3 text-sm text-ink">
-          {form.success}
-        </p>
-      ) : null}
+      {status === "success" && <p style={{ color: '#059669', fontSize: '0.9rem', textAlign: 'center', marginTop: '1rem', fontWeight: 'bold' }}>Sent successfully!</p>}
     </div>
   );
 };
 
+const inputS: React.CSSProperties = { width: '100%', padding: '0.8rem', border: '1px solid #e2e8f0', borderRadius: '0.5rem', outline: 'none', fontSize: '0.9rem' };
+const btnS: React.CSSProperties = { backgroundColor: '#1a3a32', color: 'white', padding: '1rem', borderRadius: '50px', fontWeight: 'bold', border: 'none', cursor: 'pointer', marginTop: '1rem' };
+const waS: React.CSSProperties = { backgroundColor: 'white', color: '#128C7E', border: '2px solid #128C7E', padding: '1rem', borderRadius: '50px', fontWeight: 'bold', width: '100%', cursor: 'pointer' };

@@ -34,74 +34,33 @@ export default async function ContactPage({ params }: PageProps) {
 
       <SectionShell>
         <div className="grid gap-6 lg:grid-cols-[0.95fr_1.05fr]">
+          {/* COLUMNA IZQUIERDA: INFORMACIÓN */}
           <aside className="rounded-2xl border border-pine/10 bg-white p-6 shadow-soft sm:p-8">
             <h2 className="text-2xl text-pine">{content.contactPage.detailsTitle}</h2>
-
             <dl className="mt-6 space-y-5">
               <div>
-                <dt className="text-xs font-semibold uppercase tracking-[0.08em] text-pine/70">
-                  {details.companyNameLabel}
-                </dt>
+                <dt className="text-xs font-semibold uppercase tracking-[0.08em] text-pine/70">{details.companyNameLabel}</dt>
                 <dd className="mt-1 text-sm text-ink/85">{details.companyName}</dd>
               </div>
-
               <div>
-                <dt className="text-xs font-semibold uppercase tracking-[0.08em] text-pine/70">
-                  {details.brandLabel}
-                </dt>
-                <dd className="mt-1 text-sm text-ink/85">{details.brandName}</dd>
+                <dt className="text-xs font-semibold uppercase tracking-[0.08em] text-pine/70">{details.salesEmailLabel}</dt>
+                <dd className="mt-1 text-sm text-ink/85">{details.salesEmail}</dd>
               </div>
-
               <div>
-                <dt className="text-xs font-semibold uppercase tracking-[0.08em] text-pine/70">
-                  {details.salesEmailLabel}
-                </dt>
-                <dd className="mt-1 text-sm text-ink/85">
-                  <a href={`mailto:${details.salesEmail}`} className="hover:text-pine">
-                    {details.salesEmail}
-                  </a>
-                </dd>
-              </div>
-
-              <div>
-                <dt className="text-xs font-semibold uppercase tracking-[0.08em] text-pine/70">
-                  {details.accountingEmailLabel}
-                </dt>
-                <dd className="mt-1 text-sm text-ink/85">
-                  <a href={`mailto:${details.accountingEmail}`} className="hover:text-pine">
-                    {details.accountingEmail}
-                  </a>
-                </dd>
-              </div>
-
-              <div>
-                <dt className="text-xs font-semibold uppercase tracking-[0.08em] text-pine/70">
-                  {details.rucLabel}
-                </dt>
+                <dt className="text-xs font-semibold uppercase tracking-[0.08em] text-pine/70">{details.rucLabel}</dt>
                 <dd className="mt-1 text-sm text-ink/85">{details.ruc}</dd>
               </div>
-
               <div>
-                <dt className="text-xs font-semibold uppercase tracking-[0.08em] text-pine/70">
-                  {details.addressLabel}
-                </dt>
+                <dt className="text-xs font-semibold uppercase tracking-[0.08em] text-pine/70">{details.addressLabel}</dt>
                 <dd className="mt-1 text-sm text-ink/85">{details.address}</dd>
               </div>
             </dl>
-
-            <a
-              href="#"
-              className="mt-8 inline-flex rounded-full border border-pine/20 px-5 py-2 text-sm font-semibold uppercase tracking-[0.08em] text-pine transition hover:bg-ivory"
-            >
-              {content.contactPage.whatsappLabel}
-            </a>
-            {/* Future integration: replace href with your WhatsApp Business deep link. */}
           </aside>
 
+          {/* COLUMNA DERECHA: FORMULARIO */}
           <ContactForm form={content.contactPage.form} />
         </div>
       </SectionShell>
     </div>
   );
 }
-

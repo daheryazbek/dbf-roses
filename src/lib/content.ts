@@ -595,6 +595,5 @@ const content: Record<Locale, SiteContent> = {
     },
   },
 };
-
 export const getContent = (locale: Locale) => content[locale];
 
