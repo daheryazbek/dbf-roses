@@ -3,7 +3,7 @@ import { useState, FormEvent } from "react";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const ContactForm = ({ form }: { form?: any }) => {
-  const [status, setStatus] = useState<"idle" | "sending" | "success">("idle");
+  const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
 
   const flowers = [
     "Rosas (Premium/Std)", "Spray Roses", "Alstroemerias", 
@@ -11,10 +11,37 @@ export const ContactForm = ({ form }: { form?: any }) => {
     "Girasoles", "Margaritas", "Summer Flowers Mix"
   ];
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setStatus("sending");
-    setTimeout(() => setStatus("success"), 1500);
+
+    const formData = new FormData(e.currentTarget);
+    const selectedFlowers = Array.from(formData.getAll("flowers")).join(", ");
+    
+    const data = {
+      name: formData.get("name"),
+      company: formData.get("company"),
+      country: formData.get("country"),
+      message: `${formData.get("message")}\n\nPRODUCTOS: ${selectedFlowers}`,
+      email: "web-inquiry@dbfroses.com", // Email genérico para identificar el origen
+    };
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: { "Content-Type": "application/json" },
+      });
+
+      if (response.ok) {
+        setStatus("success");
+      } else {
+        setStatus("error");
+      }
+    } catch (error) {
+      console.error(error);
+      setStatus("error");
+    }
   };
 
   return (
@@ -24,22 +51,22 @@ export const ContactForm = ({ form }: { form?: any }) => {
       </h2>
       
       <form style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }} onSubmit={handleSubmit}>
-        <input style={inputS} placeholder="Full Name / Nombre" required />
+        <input name="name" style={inputS} placeholder="Full Name / Nombre" required />
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-          <input style={inputS} placeholder="Company / Empresa" required />
-          <input style={inputS} placeholder="Country / País" required />
+          <input name="company" style={inputS} placeholder="Company / Empresa" required />
+          <input name="country" style={inputS} placeholder="Country / País" required />
         </div>
         
         <label style={{ fontSize: '0.8rem', fontWeight: 'bold', color: '#1a3a32', marginTop: '0.5rem' }}>PRODUCTOS DE INTERÉS:</label>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>
           {flowers.map(f => (
             <label key={f} style={{ fontSize: '0.8rem', display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
-              <input type="checkbox" /> {f}
+              <input type="checkbox" name="flowers" value={f} /> {f}
             </label>
           ))}
         </div>
 
-        <textarea style={{ ...inputS, minHeight: '100px' }} placeholder="Message / Detalles del pedido..." required />
+        <textarea name="message" style={{ ...inputS, minHeight: '100px' }} placeholder="Message / Detalles del pedido..." required />
 
         <button type="submit" disabled={status === "sending"} style={status === "sending" ? {...btnS, opacity: 0.7} : btnS}>
           {status === "sending" ? "SENDING..." : (form?.submit || "REQUEST QUOTATION")}
@@ -50,7 +77,8 @@ export const ContactForm = ({ form }: { form?: any }) => {
         </a>
       </form>
 
-      {status === "success" && <p style={{ color: '#059669', fontSize: '0.9rem', textAlign: 'center', marginTop: '1rem', fontWeight: 'bold' }}>Sent successfully!</p>}
+      {status === "success" && <p style={{ color: '#059669', fontSize: '0.9rem', textAlign: 'center', marginTop: '1rem', fontWeight: 'bold' }}>Sent successfully! We will contact you shortly.</p>}
+      {status === "error" && <p style={{ color: '#dc2626', fontSize: '0.9rem', textAlign: 'center', marginTop: '1rem' }}>Error sending. Please try WhatsApp.</p>}
     </div>
   );
 };
