@@ -2,16 +2,17 @@ import formData from "form-data";
 import Mailgun from "mailgun.js";
 
 export async function POST(req: Request) {
-  const body = await req.json();
-
-  const mailgun = new Mailgun(formData);
-  const mg = mailgun.client({
-    username: "api",
-    key: process.env.MAILGUN_API_KEY!,
-  });
-
   try {
-    await mg.messages.create("mg.dbfroses.com", {
+    const body = await req.json();
+
+    const mailgun = new Mailgun(formData);
+    const mg = mailgun.client({
+      username: "api",
+      key: process.env.MAILGUN_API_KEY || "",
+      url: "https://api.mailgun.net", // Forzar conexión a la región de EE.UU.
+    });
+
+    const result = await mg.messages.create("mg.dbfroses.com", {
       from: "DBF Roses <postmaster@mg.dbfroses.com>",
       to: ["ventas@dbfroses.com"],
       subject: "Nuevo cliente desde la web",
@@ -24,9 +25,10 @@ Mensaje: ${body.message}
       `,
     });
 
+    console.log("Mailgun Result:", result);
     return Response.json({ success: true });
   } catch (error) {
-    console.error(error);
-    return Response.json({ success: false });
+    console.error("Mailgun Error Details:", error);
+    return Response.json({ success: false, error: String(error) }, { status: 500 });
   }
 }
